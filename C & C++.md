@@ -1,5 +1,7 @@
 #### 虚函数与多态
 
+面向对象三大特性: 封装, 继承, 多态.
+
 
 
 #### 虚析构函数
@@ -64,4 +66,3 @@ something ... 2
 ```
 
 [参考资料](https://blog.csdn.net/starlee/article/details/619827)
-
