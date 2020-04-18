@@ -554,3 +554,13 @@ http://c.biancheng.net/view/400.html
 
 
 
+
+
+### 在构造函数中调用构造函数
+
+https://www.cnblogs.com/stemon/p/4834043.html
+
+一个实际开发中遇到的bug
+
+不行, 和Java不一样, 会导致生成一个匿名对象, 然后那个对象初始化他的变量, 而这个调用者的变量没有初始化. 
+
