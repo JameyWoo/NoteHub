@@ -1,12 +1,7 @@
-# my interview
+# Notes
 
 
 
-
-
-
-
-the notes of my interview
-
+专业课复习笔记
 
 
