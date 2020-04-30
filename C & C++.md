@@ -1,4 +1,4 @@
-# C&C++
+## C&C++
 
 
 
@@ -20,6 +20,8 @@
 #### 运行时多态
 
 C++运行时多态性是通过虚函数来实现的，虚函数允许子类重新定义成员函数，而子类重新定义父类的做法称为覆盖(Override)，或者称为重写。
+
+![image-20200430151824436](assets/image-20200430151824436.png)
 
 **多态与非多态的实质区别就是函数地址是早绑定还是晚绑定。**如果函数的调用，在编译器编译期间就可以确定函数的调用地址，并生产代码，是静态的，就是说地址是早绑定的。而如果函数调用的地址不能在编译器期间确定，需要在运行时才确定，这就属于晚绑定。
 
@@ -81,7 +83,11 @@ https://www.cnblogs.com/lizhenghn/p/3667681.html
 
 
 
+#### 虚函数表存在哪里
 
+https://www.cnblogs.com/chenhuan001/p/6485233.html
+
+虚函数表在Linux中存在**.rdata只读数据段**. 
 
 https://blog.csdn.net/lihao21/article/details/50688337
 
@@ -604,7 +610,10 @@ http://c.biancheng.net/view/400.html
 
 ### 智能指针
 
+两个关键点:
 
+1. 动态内存的自动释放
+2. 引用计数, 当引用为0的时候说明没有使用它的变量了, 就可以释放空间
 
 
 
@@ -627,4 +636,8 @@ https://www.ibm.com/developerworks/cn/rational/1508_chenjing_c11/index.html
 ![image-20200421194647073](assets/image-20200421194647073.png)
 
 
+
+### 用C语言实现面向对象
+
+to be continue
 
