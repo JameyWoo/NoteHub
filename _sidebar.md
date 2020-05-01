@@ -1,6 +1,6 @@
 <!-- docs/_sidebar.md -->
 
-* [首页](/README.md)
+* [首页](README.md)
 * [C & C++](C&C++.md)
 * [数据结构](数据结构.md)
 * [算法](算法.md)
