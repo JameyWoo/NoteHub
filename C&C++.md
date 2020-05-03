@@ -119,7 +119,7 @@ private:
 
 ![这里写图片描述](assets/20160528104806455)
 
-## 虚析构函数
+### 虚析构函数
 
 为什么要有虚析构函数?
 
@@ -186,7 +186,7 @@ something ... 2
 
 
 
-## C++虚构造函数
+### C++虚构造函数
 
 C++是不支持虚构造函数的
 
@@ -194,7 +194,13 @@ https://www.zhihu.com/question/35632207
 
 
 
-## struct 和 class 的区别
+
+
+## 一些关键字
+
+
+
+### struct 和 class 的区别
 
 有两种struct
 
@@ -224,7 +230,115 @@ C++的struct也可以继承 ..…
 
 
 
-## 堆和栈的区别
+
+
+### static关键字
+
+http://c.biancheng.net/cpp/biancheng/view/141.html
+
+有时希望函数中的局部变量的值在函数调用结束后不消失而保留原值，即其占用的存储单元不释放，在下一次该函数调用时，该变量保留上一次函数调用结束时的值。这时就应该指定该局部变量为**静态局部变量(static local variable)**。
+
+对静态局部变量的说明：
+
+1. 静态局部变量在静态存储区内分配存储单元。在程序整个运行期间都不释放。**而自动变量(即动态局部变量)属于动态存储类别，存储在动态存储区空间(而不是静态存储区空间)，函数调用结束后即释放。**
+2. **为静态局部变量赋初值是在编译时进行的**，即只赋初值一次，在程序运行时它已有初值。以后**每次调用函数时不再重新赋初值而只是保留上次函数调用结束时的值**。而为自动变量赋初值，不是在编译时进行的，而是在函数调用时进行，每调用一次函数重新给一次初值，相当于执行一次赋值语句。
+3. 如果在定义局部变量时不赋初值的话，**对静态局部变量来说，编译时自动赋初值0(对数值型变量)或空字符(对字符型变量)。而对自动变量来说，如果不赋初值，则它的值是一个不确定的值。**这是由于每次函数调用结束后存储单元已释放，下次调用时又重新另分配存储单元，而所分配的单元中的值是不确定的。
+4. 虽然静态局部变量在函数调用结束后仍然存在，**但其他函数是不能引用它的，也就是说，在其他函数中它是“不可见”的。** 
+
+比如下面的代码, fac函数中的f值会保留. 
+
+```cpp
+#include <iostream>
+using namespace std;
+int fac(int);  //函数声明
+int main() {
+	int i;
+	for (i = 1; i <= 5; i++)
+		cout << i << "!=" << fac(i) << endl;
+	return 0;
+}
+
+int fac(int n) {
+	static int f = 1;	   //f为静态局部变量，函数结束时f的值不释放
+	f			 = f * n;  //在f原值基础上乘以n
+	return f;
+}
+```
+
+当static关键字用在类的成员函数中时
+
+https://blog.csdn.net/zhizhengguan/article/details/81183602 
+
+
+
+
+
+### extern关键字
+
+https://blog.csdn.net/FX677588/article/details/52687707
+
+它属于**变量声明**，extern int a和int a的区别就是，**前者告诉编译器，有一个int类型的变量a定义在其他地方，如果有调用请去其他文件中查找定义。** 
+
+关于extern变量声明使用，例如一个工程中：
+　　　　Test1.cpp文件开头定义了int i =10; //定义了一个全局变量
+　　　　Test2.cpp文件中定义：extern int i; //声明在另一个编译单元有i变量
+注意：不可以写成extern int i =10，因为变量已经存在，不可以在声明时候赋初始值。
+
+### extern和static比较
+
+　　static静态变量虽然和整个程序共生存期，但是作用域还是需要看其定义的地方，当你在某个函数中定义一个变量，该变量作用域仅在该函数中。**但你在文件开头定义一个全局变量，该变量作用域仅在该文件中**。**所以当你声明一个变量调用另一个文件静态变量，编译器会报错的。** 
+
+extern声明尽量写在头文件中
+
+
+
+
+
+### auto关键字
+
+https://blog.csdn.net/qq_42957923/article/details/90107840
+
+在早期C/C++中auto的含义是：使用auto修饰的变量，是具有**自动存储器**的局部变量(也就是上面几节谈到的东西)
+C++11中，标准委员会赋予了auto全新的含义即：auto不再是一个存储类型指示符，而是作为一个新的类型指示符来指示编译器，auto声明的变量必须由编译器在编译时期推导而得
+
+auto特性:
+1.auto不能作为函数参数
+2.auto不能直接声明数组
+
+3. 为了避免与C++98中的auto发生混淆，C++11只保留了auto作为类型指示符的用法
+4. auto在实际中最常见的优势用法就是跟以后会讲到的C++11提供的新式for循环，还有lambda表达式等进行配合使用。
+5. auto不能定义类的非静态成员变量
+6. 实例化模板时不能使用auto作为模板参数
+
+下面的代码可以在C中通过而在C++中无法通过
+
+```c
+#include <stdio.h>
+
+int main() {
+	auto int a = 1;
+	printf("%d\n", a);
+}
+```
+
+下面的代码可以在C++中通过而在C中无法通过
+
+```cpp
+#include <bits/stdc++.h>
+
+using namespace std;
+
+int main() {
+	auto a = 1;
+	cout << a << endl;
+}
+```
+
+
+
+## 内存空间
+
+### 堆和栈的区别
 
 操作系统中的堆和栈都是指内存空间，不同的是堆为按需申请、动态分配，例如 C 中的 malloc 函数和 C++ 中的 new 操作（当然 C++ 的 new 不仅仅是申请内存这么简单）。内存中的空闲空间并不是连续的，而是不同程序占用了不同的一块一块的内存，即使是同一个程序也可能占用了不同地方的多块内存。操作系统中则会对这些空间进行统一的管理，在应用程序提出申请时，就会从堆中按照一定算法找出一块可用内存，标记占用空间等信息之后返回其起始地址给程序。在程序结束之前，操作系统不会删除已经申请的内存，而是要靠程序主动提出释放的请求（free、delete），如果使用后忘记释放，就会造成所谓的内存泄漏问题。因此堆基本上可以理解为当前可以使用的空闲内存，但是其申请和释放都要程序员自己写代码管理。
 
@@ -272,113 +386,7 @@ int test[10000][10000] = {1};
 
 
 
-## static关键字
-
-http://c.biancheng.net/cpp/biancheng/view/141.html
-
-有时希望函数中的局部变量的值在函数调用结束后不消失而保留原值，即其占用的存储单元不释放，在下一次该函数调用时，该变量保留上一次函数调用结束时的值。这时就应该指定该局部变量为**静态局部变量(static local variable)**。
-
-对静态局部变量的说明：
-
-1. 静态局部变量在静态存储区内分配存储单元。在程序整个运行期间都不释放。**而自动变量(即动态局部变量)属于动态存储类别，存储在动态存储区空间(而不是静态存储区空间)，函数调用结束后即释放。**
-2. **为静态局部变量赋初值是在编译时进行的**，即只赋初值一次，在程序运行时它已有初值。以后**每次调用函数时不再重新赋初值而只是保留上次函数调用结束时的值**。而为自动变量赋初值，不是在编译时进行的，而是在函数调用时进行，每调用一次函数重新给一次初值，相当于执行一次赋值语句。
-3. 如果在定义局部变量时不赋初值的话，**对静态局部变量来说，编译时自动赋初值0(对数值型变量)或空字符(对字符型变量)。而对自动变量来说，如果不赋初值，则它的值是一个不确定的值。**这是由于每次函数调用结束后存储单元已释放，下次调用时又重新另分配存储单元，而所分配的单元中的值是不确定的。
-4. 虽然静态局部变量在函数调用结束后仍然存在，**但其他函数是不能引用它的，也就是说，在其他函数中它是“不可见”的。** 
-
-比如下面的代码, fac函数中的f值会保留. 
-
-```cpp
-#include <iostream>
-using namespace std;
-int fac(int);  //函数声明
-int main() {
-	int i;
-	for (i = 1; i <= 5; i++)
-		cout << i << "!=" << fac(i) << endl;
-	return 0;
-}
-
-int fac(int n) {
-	static int f = 1;	   //f为静态局部变量，函数结束时f的值不释放
-	f			 = f * n;  //在f原值基础上乘以n
-	return f;
-}
-```
-
-当static关键字用在类的成员函数中时
-
-https://blog.csdn.net/zhizhengguan/article/details/81183602 
-
-
-
-
-
-## extern关键字
-
-https://blog.csdn.net/FX677588/article/details/52687707
-
-它属于**变量声明**，extern int a和int a的区别就是，**前者告诉编译器，有一个int类型的变量a定义在其他地方，如果有调用请去其他文件中查找定义。** 
-
-关于extern变量声明使用，例如一个工程中：
-　　　　Test1.cpp文件开头定义了int i =10; //定义了一个全局变量
-　　　　Test2.cpp文件中定义：extern int i; //声明在另一个编译单元有i变量
-注意：不可以写成extern int i =10，因为变量已经存在，不可以在声明时候赋初始值。
-
-### 和static比较
-
-　　static静态变量虽然和整个程序共生存期，但是作用域还是需要看其定义的地方，当你在某个函数中定义一个变量，该变量作用域仅在该函数中。**但你在文件开头定义一个全局变量，该变量作用域仅在该文件中**。**所以当你声明一个变量调用另一个文件静态变量，编译器会报错的。** 
-
-extern声明尽量写在头文件中
-
-
-
-
-
-## auto关键字
-
-https://blog.csdn.net/qq_42957923/article/details/90107840
-
-在早期C/C++中auto的含义是：使用auto修饰的变量，是具有**自动存储器**的局部变量(也就是上面几节谈到的东西)
-C++11中，标准委员会赋予了auto全新的含义即：auto不再是一个存储类型指示符，而是作为一个新的类型指示符来指示编译器，auto声明的变量必须由编译器在编译时期推导而得
-
-auto特性:
-1.auto不能作为函数参数
-2.auto不能直接声明数组
-
-3. 为了避免与C++98中的auto发生混淆，C++11只保留了auto作为类型指示符的用法
-4. auto在实际中最常见的优势用法就是跟以后会讲到的C++11提供的新式for循环，还有lambda表达式等进行配合使用。
-5. auto不能定义类的非静态成员变量
-6. 实例化模板时不能使用auto作为模板参数
-
-下面的代码可以在C中通过而在C++中无法通过
-
-```c
-#include <stdio.h>
-
-int main() {
-	auto int a = 1;
-	printf("%d\n", a);
-}
-```
-
-下面的代码可以在C++中通过而在C中无法通过
-
-```cpp
-#include <bits/stdc++.h>
-
-using namespace std;
-
-int main() {
-	auto a = 1;
-	cout << a << endl;
-}
-```
-
-
-
-
-
-## 进程的内存分布情况
+### 进程的内存分布情况
 
 https://blog.csdn.net/i_scream_/article/details/51366809
 
@@ -407,65 +415,9 @@ https://blog.csdn.net/i_scream_/article/details/51366809
 
 
 
-## 实现c语言的memcpy函数
+## 一些函数和方法
 
-C 库函数 void *memcpy(void *str1, const void *str2, size_t n) 从存储区 str2 复制 n 个字符到存储区 str1。
-
-实现这个函数需要注意以下几个点: 
-1. 传递进入memcpy的指针参数是 `void *`, 是通用的指针类型
-2. 首先需要判断指针是否为NULL
-3. 对字节进行操作, 因为size指的是字节数. 因此可以将`void *`转化为`char *`进行操作
-4. 需要考虑到如果源地址和目标地址有重合的部分
-
-
-下面是我的实现, main 中的测试包括 int的拷贝, 字符数组的拷贝, 重叠情况的拷贝.
-
-```cpp
-#include <iostream>
-using namespace std;
-
-void* memcpy(void* dst, void* src, size_t size) {
-    if (dst == NULL || src == NULL)
-        return NULL;
-    char* new_dst = (char*)dst;
-    char* new_src = (char*)src;
-
-    if (dst > src && new_dst - new_src <= size) {
-        for (int i = size - 1; i >= 0; i--) {
-            new_dst[i] = new_src[i];
-        }
-    } else {
-        for (int i = 0; i < size; i++) {
-            new_dst[i] = new_src[i];
-        }
-    }
-
-    return dst;
-}
-
-int main() {
-    // 整形的拷贝
-    int a = 12, b = 2;
-    int* c = (int*)memcpy(&b, &a, sizeof(b));
-    cout << (*c) << endl;
-
-    // 字符串的拷贝
-    char f[] = "abcfajlafd";
-    char d[] = "fuck";
-    cout << "sizeof d: " << sizeof(d) << endl;
-    char* e = (char*)memcpy(f, d, sizeof(d));
-    cout << e << endl;
-
-    // ! 考虑地址重叠的情况
-    char g[] = "12345";
-    char* h  = (char*)memcpy(g + 2, g, sizeof(g));
-    cout << h << endl;
-}
-```
-
-
-
-## 拷贝构造函数
+### 拷贝构造函数
 
 https://blog.csdn.net/tunsanty/article/details/4264738
 
@@ -475,7 +427,27 @@ https://blog.csdn.net/tunsanty/article/details/4264738
 
 
 
-## 类构造函数初始化列表
+### 在构造函数中调用构造函数
+
+https://www.cnblogs.com/stemon/p/4834043.html
+
+一个实际开发中遇到的bug
+
+不行, 和Java不一样, 会导致生成一个匿名对象, 然后那个对象初始化他的变量, 而这个调用者的变量没有初始化. 
+
+> 如果仅仅为了一个构造函数重用另一个构造函数的代码，那么完全可以**把构造函数中的公共部分抽取出来定义一个成员函数**(推荐为private),然后在每个需要这个代码的构造函数中调用该函数即可
+>
+> 但是这样其他的成员函数可能会调用初始化成员函数, 而这一般是不好的.
+
+下面这种方法更好. 这是**C++11标准的委派构造函数** . 而外层的构造函数称为目标构造函数. 
+
+https://www.ibm.com/developerworks/cn/rational/1508_chenjing_c11/index.html
+
+![image-20200421194647073](assets/image-20200421194647073.png)
+
+
+
+### 类构造函数初始化列表
 
 https://www.runoob.com/w3cnote/cpp-construct-function-initial-list.html
 
@@ -592,6 +564,65 @@ struct foo
 
 
 
+### 实现c语言的memcpy函数
+
+C 库函数 void *memcpy(void *str1, const void *str2, size_t n) 从存储区 str2 复制 n 个字符到存储区 str1。
+
+实现这个函数需要注意以下几个点: 
+
+1. 传递进入memcpy的指针参数是 `void *`, 是通用的指针类型
+2. 首先需要判断指针是否为NULL
+3. 对字节进行操作, 因为size指的是字节数. 因此可以将`void *`转化为`char *`进行操作
+4. 需要考虑到如果源地址和目标地址有重合的部分
+
+
+下面是我的实现, main 中的测试包括 int的拷贝, 字符数组的拷贝, 重叠情况的拷贝.
+
+```cpp
+#include <iostream>
+using namespace std;
+
+void* memcpy(void* dst, void* src, size_t size) {
+    if (dst == NULL || src == NULL)
+        return NULL;
+    char* new_dst = (char*)dst;
+    char* new_src = (char*)src;
+
+    if (dst > src && new_dst - new_src <= size) {
+        for (int i = size - 1; i >= 0; i--) {
+            new_dst[i] = new_src[i];
+        }
+    } else {
+        for (int i = 0; i < size; i++) {
+            new_dst[i] = new_src[i];
+        }
+    }
+
+    return dst;
+}
+
+int main() {
+    // 整形的拷贝
+    int a = 12, b = 2;
+    int* c = (int*)memcpy(&b, &a, sizeof(b));
+    cout << (*c) << endl;
+
+    // 字符串的拷贝
+    char f[] = "abcfajlafd";
+    char d[] = "fuck";
+    cout << "sizeof d: " << sizeof(d) << endl;
+    char* e = (char*)memcpy(f, d, sizeof(d));
+    cout << e << endl;
+
+    // ! 考虑地址重叠的情况
+    char g[] = "12345";
+    char* h  = (char*)memcpy(g + 2, g, sizeof(g));
+    cout << h << endl;
+}
+```
+
+
+
 
 
 ## C++ string操作
@@ -610,24 +641,6 @@ http://c.biancheng.net/view/400.html
 2. 引用计数, 当引用为0的时候说明没有使用它的变量了, 就可以释放空间
 
 
-
-## 在构造函数中调用构造函数
-
-https://www.cnblogs.com/stemon/p/4834043.html
-
-一个实际开发中遇到的bug
-
-不行, 和Java不一样, 会导致生成一个匿名对象, 然后那个对象初始化他的变量, 而这个调用者的变量没有初始化. 
-
-> 如果仅仅为了一个构造函数重用另一个构造函数的代码，那么完全可以**把构造函数中的公共部分抽取出来定义一个成员函数**(推荐为private),然后在每个需要这个代码的构造函数中调用该函数即可
->
-> 但是这样其他的成员函数可能会调用初始化成员函数, 而这一般是不好的.
-
-下面这种方法更好. 这是**C++11标准的委派构造函数** . 而外层的构造函数称为目标构造函数. 
-
-https://www.ibm.com/developerworks/cn/rational/1508_chenjing_c11/index.html
-
-![image-20200421194647073](assets/image-20200421194647073.png)
 
 
 
